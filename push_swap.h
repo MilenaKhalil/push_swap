@@ -1,26 +1,23 @@
+
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_lstnew.c                                        :+:    :+:            */
+/*   libft.h                                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: mikhalil <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/10/30 13:38:14 by mikhalil      #+#    #+#                 */
-/*   Updated: 2022/11/01 15:55:03 by mikhalil      ########   odam.nl         */
+/*   Created: 2022/10/04 19:54:19 by mikhalil      #+#    #+#                 */
+/*   Updated: 2022/11/23 18:15:30 by mikhalil      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef PUSH_SWAP_H
+# define PUSH_SWAP_H
 
-t_list	*ft_lstnew(int content)
-{
-	t_list	*new;
+# include <unistd.h>
+# include <stdlib.h>
+# include <stdio.h>
+# include <limits.h>
+# include "libft/libft.h"
 
-	new = malloc(sizeof(t_list));
-	if (!new)
-		return (0);
-	new->next = 0;
-	new->content = content;
-	return (new);
-}
-
+#endif

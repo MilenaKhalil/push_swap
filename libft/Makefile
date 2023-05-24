@@ -71,10 +71,10 @@ NAME = libft.a
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	ar -rc $(NAME) $(OBJ)
+$(NAME): $(OBJ) $(OBJ_BONUS)
+	ar -rc $(NAME) $(OBJ) $(OBJ_BONUS)
 
-%.o: %.c
+%.o: %.c libft.h
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:
