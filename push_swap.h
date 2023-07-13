@@ -20,4 +20,21 @@
 # include <limits.h>
 # include "libft/libft.h"
 
+typedef struct s_garb
+{
+    char    *prog_name;
+	t_list	*stack_a;
+    t_list  *stack_b;
+    t_list  *a;
+    t_list  *b;
+}	t_garb;
+
+void    swap(t_list **stack, char *str);
+void    swap_swap(t_list **stack_a, t_list **stack_b, char *str);
+void    push(t_list **stack_a, t_list **stack_b, char *com);
+void    rotate(t_list **stack, int rev, char *str);
+void    two_rot(t_list **stack_a, t_list **stack_b, char *com, char *str);
+void	bad_exit(t_list **a, char *str);
+void    sort_stack(t_list **stack_a, t_list **stack_b);
+
 #endif

@@ -1,97 +1,106 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   main.c                                             :+:    :+:            */
+/*   main2.c                                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: mikhalil <mikhalil@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/03 21:12:16 by mikhalil      #+#    #+#                 */
-/*   Updated: 2023/05/03 21:27:11 by mikhalil      ########   odam.nl         */
+/*   Updated: 2023/07/06 19:13:53 by mikhalil      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void    error_exit(char *prog_name, char *message)
+void	bad_exit(t_list **a, char *str)
 {
-    ft_putstr_fd(prog_name, 2);
-    ft_putstr_fd(": ", 2);
-    ft_putstr_fd(message, 2);
-    exit (1);
+	ft_lstclear(a);
+	write(2, str, ft_strlen(str));
+	exit(1);
 }
 
-int	get_int(const char *str, char *prog_name)
+int	itoa(t_list **a, char *str)
 {
-	int		i;
+	long	res;
 	int		min;
-	int		res;
+	int		i;
 
-	min = 1;
 	res = 0;
+	min = -1;
 	i = 0;
-	while ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
-		i++;
 	if (str[i] == '-')
 	{
-		min = -1;
+		min = 1;
 		i++;
 	}
-	while (str[i] >= '0' && str[i] <= '9')
+	while (str[i])
 	{
-		res = res * 10 + str[i] - '0';
+		if (str[i] <= '9' && str[i] >= '0')
+			res = res * 10 - (str[i] - '0');
+		else
+			bad_exit(a, "Input is not a digit\n");
+		if (res * min > INT_MAX || res * min < INT_MIN)
+			bad_exit(a, "Input out of limits\n");
 		i++;
 	}
-    if (str[i] != 0 && !(str[i] >= '0' && str[i] <= '9'))
-        error_exit(prog_name, "Error: argument is not an int\n");
 	return (res * min);
 }
 
-t_list	**get_input(int argc, char **argv)
+int	get_input(int argc, char **argv, t_list **a)
 {
-	t_list	**a;
-    t_list  *new;
-	int		i;
+	int	i;
+	int	sorted;
+	int	prev;
+	int	check;
 
-	i = 1;
-    a = 0;
-	while (i < argc)
+    i = argc - 1;
+	sorted = 1;
+	while (i >= 1)
 	{
-		new->content = get_int(argv[i], argv[0]);       // надо будет сделать фриинг если плохие аргументы
-        new->next = 0;
-        if (a == 0)
-            a = &new;
-        else
-            ft_lstadd_back(a, new);
-        printf("adress = %p\n", new->next);
-        printf("Next arg = %d\n", ft_lstlast(*a)->content);
-        i++;
+		check = itoa(a, argv[i]);
+		if (!(*a))
+			*a = ft_lstnew(check);
+		else
+			ft_lstadd_front(a, ft_lstnew(check));
+        if (i != argc - 1 && prev < check)
+            sorted = 0;
+        if (i != argc - 1 && prev == check)
+            bad_exit(a, "Numbers are not unique!!!\n");
+        prev = check;
+		i--;
 	}
-    return (a);
+    return (sorted);
 }
 
-void    print_list(t_list   **a)
+void	print_stack(t_list *ab)
 {
-    if (!a || !(*a))
-        return ;
-    while ((*a)->next)
-    {
-        printf("%d ", (*a)->content);
-        *a = (*a)->next;
-    }
-    printf("/n");
+	int	i;
+
+	i = 0;
+	while (ab)
+	{
+		printf("el[%d] = %d ", i, ab->content);
+		ab = ab->next;
+		i++;
+	}
+	printf("\n");
 }
 
 int	main(int argc, char **argv)
 {
-	t_list	**a;
+	t_list	*stack_a;
+	t_list	*stack_b;
+    int     sorted;
 
-    //(void) argv;
-    //(void) argc;
-    if (argc == 1)
-        error_exit(argv[0], "Error: not enough arguments\n");
-    a = get_input(argc, argv);
-    print_list(a);
-    //printf("%d\n", get_int(argv[1], argv[0]));
-//	a = get_input(argc, argv);
-	return (0);
+	stack_a = NULL;
+	stack_b = NULL;
+	if (argc == 1)
+		return (0);
+	sorted = get_input(argc, argv, &stack_a);
+    if (sorted)
+        return (0);
+	//print_stack(stack_a);
+	sort_stack(&stack_a, &stack_b);
+	//print_stack(stack_a);
+    return (0);
 }
