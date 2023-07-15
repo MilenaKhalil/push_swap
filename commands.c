@@ -24,14 +24,21 @@ void    swap(t_list **stack, char *str)                     //       sa, sb
     write(1, str, ft_strlen(str));
 }
 
-void    swap_swap(t_list **stack_a, t_list **stack_b, char *str) //       ss
+void    swaps(t_list **stack_a, t_list **stack_b, char *com, char *str) //       sa, sb, ss
 {
-    swap(stack_a, 0);
-    swap(stack_b, 0);
-    write(1, str, ft_strlen(str));
+    if (com[1] == 'a')
+        swap(stack_a, str);
+    else if (com[1] == 'b')
+        swap(stack_b, str);
+    else
+    {
+        swap(stack_a, 0);
+        swap(stack_b, 0);
+        write(1, str, ft_strlen(str));
+    }
 }
 
-void    push(t_list **stack_a, t_list **stack_b, char *com)    //       pb, pa
+void    push(t_list **stack_a, t_list **stack_b, char *com, char *str)    //       pb, pa
 {
     t_list  *second;
     if (!ft_strncmp(com, "pb", 2))
@@ -52,6 +59,7 @@ void    push(t_list **stack_a, t_list **stack_b, char *com)    //       pb, pa
         (*stack_a) = (*stack_b);
         (*stack_b) = second;
     }
+    write(1, str, ft_strlen(str));
 }
 
 void    rotate(t_list **stack, int rev, char *str)            //       ra, rb, rra, rrb
@@ -80,14 +88,19 @@ void    rotate(t_list **stack, int rev, char *str)            //       ra, rb, r
     write(1, str, ft_strlen(str));
 }
 
-void    two_rot(t_list **stack_a, t_list **stack_b, char *com, char *str) //      rr, rrr
+void    rotations(t_list **a, t_list **b, char *com, char *str) //     ra, rb, rr, rra, rrb, rrr
 {
     int rev;
 
-    rev = 0;
-    if (ft_strlen(com) == 3)
-        rev = 1;
-    rotate(stack_a, rev, 0);
-    rotate(stack_b, rev, 0);
-    write(1, str, ft_strlen(str));
+    rev = ft_strlen(com) - 2;
+    if (com[1 + rev] == 'a')
+        rotate(a, rev, str);
+    else if (com[1 + rev] == 'b')
+        rotate(a, rev, str);
+    else
+    {
+        rotate(a, rev, 0);
+        rotate(b, rev, 0);
+        write(1, str, ft_strlen(str));
+    }
 }

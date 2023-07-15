@@ -12,7 +12,8 @@
 
 SRC =	main.c \
 		commands.c \
-		push_swap.c
+		push_swap.c \
+		utils.c
 
 LIBFT = ./libft/libft.a
 

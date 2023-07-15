@@ -29,12 +29,21 @@ typedef struct s_garb
     t_list  *b;
 }	t_garb;
 
+typedef struct s_com
+{
+	struct s_com	*next;
+    char            *command;
+}	t_com;
+
 void    swap(t_list **stack, char *str);
-void    swap_swap(t_list **stack_a, t_list **stack_b, char *str);
-void    push(t_list **stack_a, t_list **stack_b, char *com);
+void    swaps(t_list **stack_a, t_list **stack_b, char *com, char *str);
+void    push(t_list **stack_a, t_list **stack_b, char *com, char *str);
 void    rotate(t_list **stack, int rev, char *str);
-void    two_rot(t_list **stack_a, t_list **stack_b, char *com, char *str);
-void	bad_exit(t_list **a, char *str);
+void    rotations(t_list **stack_a, t_list **stack_b, char *com, char *str);
+void	bad_exit(t_list **a);
+void	good_exit(t_list **a);
 void    sort_stack(t_list **stack_a, t_list **stack_b);
+void    inter_command(t_list **a, t_list **b, char *com, char *str);
+void	print_stack(t_list *ab);                                              // I will have to remove it
 
 #endif
