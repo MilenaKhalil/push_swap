@@ -1,92 +1,92 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   main2.c                                            :+:    :+:            */
+/*   push_swap.c                                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: mikhalil <mikhalil@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/03 21:12:16 by mikhalil      #+#    #+#                 */
-/*   Updated: 2023/07/06 19:13:53 by mikhalil      ########   odam.nl         */
+/*   Updated: 2023/07/16 19:59:09 by mikhalil      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void    sort_three(t_list **stack_a)
+void	sort_three(t_list **stack_a)
 {
-    t_list  *a;
-    t_list  *ne;
-    t_list  *nene;
+	t_list	*a;
+	t_list	*ne;
+	t_list	*nene;
 
-    a = (*stack_a);
-    ne = a->next;
-    nene = a->next->next;
-    if (a->content < ne->content && ne->content < nene->content)
-        return ;
-    if (a->content > ne->content && a->content > nene->content)
-        rotate(stack_a, 0, "ra\n");
-    else if (ne->content > a->content && ne->content > nene->content)
-        rotate(stack_a, 1, "rra\n");
-    if ((*stack_a)->content > (*stack_a)->next->content)
-        swap(stack_a, "sa\n");
+	a = (*stack_a);
+	ne = a->next;
+	nene = a->next->next;
+	if (a->content < ne->content && ne->content < nene->content)
+		return ;
+	if (a->content > ne->content && a->content > nene->content)
+		rotate(stack_a, 0, "ra\n");
+	else if (ne->content > a->content && ne->content > nene->content)
+		rotate(stack_a, 1, "rra\n");
+	if ((*stack_a)->content > (*stack_a)->next->content)
+		swap(stack_a, "sa\n");
 }
 
-void    insert_el(t_list **a, t_list **b, int pos_a, int pos_b)  // просто ra и просто rb
+void	insert_el(t_list **a, t_list **b, int pos_a, int pos_b)  // просто ra и просто rb
 {
-    while (pos_a)
-    {
-        inter_command(a, b, "ra", "ra\n");
-        pos_a--;
-    }
-    while (pos_b)
-    {
-        inter_command(a, b, "rb", "rb\n");
-        pos_b--;
-    }
-    inter_command(a, b, "pa", "pa\n");
+	while (pos_a)
+	{
+		inter_command(a, b, "ra", "ra\n");
+		pos_a--;
+	}
+	while (pos_b)
+	{
+		inter_command(a, b, "rb", "rb\n");
+		pos_b--;
+	}
+	inter_command(a, b, "pa", "pa\n");
 }
 
-void    stack_rot(t_list **a, t_list **b, int iter, int i)
+void	stack_rot(t_list **a, t_list **b, int iter, int i)
 {
-    int size_a;
+	int	size_a;
 
-    size_a = ft_lstsize(*a);
-    while ((*a)->content != iter)
-    {
-        if (i > size_a / 2)
-            inter_command(a, b, "rra", "rra\n");
-        else
-            inter_command(a, b, "ra", "ra\n");
-    }
+	size_a = ft_lstsize(*a);
+	while ((*a)->content != iter)
+	{
+		if (i > size_a / 2)
+			inter_command(a, b, "rra", "rra\n");
+		else
+			inter_command(a, b, "ra", "ra\n");
+	}
 }
 
-int    find_place(t_list **a, int elem, int min, int max)
+int	find_place(t_list **a, int elem, int min, int max)
 {
-    int     i;
-    t_list  *iter;
-    t_list  *prev;
+	int		i;
+	t_list	*iter;
+	t_list	*prev;
 
-    i = 0;
-    iter = *a;
-    prev = ft_lstlast(*a);
-    if (elem > min && elem < max)
-    {
-        while (!(iter->content > elem && elem > prev->content))
-        {
-            i++;
-            prev = iter;
-            iter = iter->next;
-        }
-    }
-    else
-    {
-        while (iter->content != min)
-        {
-            iter = iter->next;
-            i++;
-        }
-    }
-    return (i);
+	i = 0;
+	iter = *a;
+	prev = ft_lstlast(*a);
+	if (elem > min && elem < max)
+	{
+		while (!(iter->content > elem && elem > prev->content))
+		{
+		    i++;
+	        prev = iter;
+	        iter = iter->next;
+	    }
+	}
+	else
+	{
+	    while (iter->content != min)
+	    {
+	        iter = iter->next;
+	        i++;
+	    }
+	}
+	return (i);
 }
 
 int find_best(t_list **a, t_list *b, int min, int max)
