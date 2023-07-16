@@ -12,25 +12,6 @@
 
 #include "push_swap.h"
 
-/*int is_sorted(t_list *a, int rev)
-{
-    int prev;
-
-    if (!a || !(a->next))
-        return (1);
-    prev = a->content;
-    a = a->next;
-    while (a)
-    {
-        if ((!rev && prev > a->content)
-                || (rev && prev < a->content))
-            return (0);
-        prev = a->content;
-        a = a->next;
-    }
-    return (1);
-}*/
-
 void    sort_three(t_list **stack_a)
 {
     t_list  *a;
@@ -50,12 +31,27 @@ void    sort_three(t_list **stack_a)
         swap(stack_a, "sa\n");
 }
 
-void    stack_rot(t_list **a, t_list **b, t_list *iter, int i)
+void    insert_el(t_list **a, t_list **b, int pos_a, int pos_b)  // просто ra и просто rb
+{
+    while (pos_a)
+    {
+        inter_command(a, b, "ra", "ra\n");
+        pos_a--;
+    }
+    while (pos_b)
+    {
+        inter_command(a, b, "rb", "rb\n");
+        pos_b--;
+    }
+    inter_command(a, b, "pa", "pa\n");
+}
+
+void    stack_rot(t_list **a, t_list **b, int iter, int i)
 {
     int size_a;
 
     size_a = ft_lstsize(*a);
-    while ((*a)->content != iter->content)
+    while ((*a)->content != iter)
     {
         if (i > size_a / 2)
             inter_command(a, b, "rra", "rra\n");
@@ -64,7 +60,7 @@ void    stack_rot(t_list **a, t_list **b, t_list *iter, int i)
     }
 }
 
-void    find_place(t_list **a, t_list **b, t_list **min, t_list **max)
+int    find_place(t_list **a, int elem, int min, int max)
 {
     int     i;
     t_list  *iter;
@@ -73,36 +69,66 @@ void    find_place(t_list **a, t_list **b, t_list **min, t_list **max)
     i = 0;
     iter = *a;
     prev = ft_lstlast(*a);
-    if ((*b)->content > (*min)->content && (*b)->content < (*max)->content)
+    if (elem > min && elem < max)
     {
-        while (!(iter->content > (*b)->content && (*b)->content > prev->content))
+        while (!(iter->content > elem && elem > prev->content))
         {
             i++;
             prev = iter;
             iter = iter->next;
         }
-        stack_rot(a, b, iter, i);
     }
     else
     {
-        while (iter->content != (*min)->content)
+        while (iter->content != min)
         {
             iter = iter->next;
             i++;
         }
-        stack_rot(a, b, iter, i);
-        if ((*b)->content > (*max)->content)
-            *max = *b;
-        else
-            *min = *b;
     }
+    return (i);
+}
+
+int find_best(t_list **a, t_list *b, int min, int max)
+{
+    int b_pos;
+    int best;
+    int best_pos;
+
+    best = -1;
+    b_pos = 0;
+    while (b)
+    {
+        if (best == -1 || best > find_place(a, b->content, min, max) + b_pos)
+        {
+            best_pos = b_pos;
+            best = find_place(a, b->content, min, max) + b_pos;
+        }
+        b = b->next;
+        b_pos++;
+    }
+    //return best_pos;
+    return (0);
+}
+
+int     get_elem(t_list *stack, int pos)
+{
+    while (pos)
+    {
+        stack = stack->next;
+        pos--;
+    }
+    return (stack->content);
 }
 
 void    real_sort(t_list **a, t_list **b)
 {
+    t_list  *temp;
     int     size_a;
-    t_list  *min;
-    t_list  *max;
+    int     min;
+    int     max;
+    int     pos_a;
+    int     pos_b;
     int     i;
 
     size_a = ft_lstsize(*a);
@@ -113,26 +139,34 @@ void    real_sort(t_list **a, t_list **b)
         size_a--;
     }
     sort_three(a);
-    min = (*a);
-    max = (*a)->next->next;
+    min = (*a)->content;
+    max = (*a)->next->next->content;
     while (*b)
     {
-        find_place(a, b, &min, &max);
-        inter_command(a, b, "pa", "pa\n");
+        pos_b = find_best(a, *b, min, max);
+        pos_a = find_place(a, get_elem(*b, pos_b), min, max);//(*b)->content, min, max);
+        if (get_elem(*b, pos_b) > max)
+            max = get_elem(*b, pos_b);
+        else if (get_elem(*b, pos_b) < min)
+            min = get_elem(*b, pos_b);
+        /*if ((*b)->content > max)
+            max = (*b)->content;
+        else if ((*b)->content < min)
+            min = (*b)->content;*/
+        insert_el(a, b, pos_a, pos_b);
     }
-    max = *a;
-    while (max->content != min->content)
+    temp = *a;
+    while (temp->content != min)
     {
-        max = max->next;
+        temp = temp->next;
         i++;
     }
     stack_rot(a, b, min, i);
 }
 
-void    sort_stack(t_list **stack_a, t_list **stack_b)           // лучше передавать сюда структуру!!!
+void    sort_stack(t_list **stack_a, t_list **stack_b)              // лучше передавать сюда структуру!!!
 {
     int     length;
-    //char    **commands[10][3];
 
     (void) stack_b;
     length = ft_lstsize(*stack_a);
@@ -140,10 +174,6 @@ void    sort_stack(t_list **stack_a, t_list **stack_b)           // лучше �
         swap(stack_a, "sa\n");
     else if (length == 3)
         sort_three(stack_a);
-//    else if (length <= 5)
-//        sort_some(stack_a, stack_b);                   // нужно проверять числа на одинаковость!!!
     else
         real_sort(stack_a, stack_b);                                // нужно проверять числа на одинаковость!!!
-    //print_stack(*stack_a);
-    //print_stack(*stack_b);
 }
