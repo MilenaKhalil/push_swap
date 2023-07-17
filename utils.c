@@ -12,6 +12,36 @@
 
 #include "push_swap.h"
 
+int     get_elem(t_list *stack, int pos)
+{
+    while (pos)
+    {
+        stack = stack->next;
+        pos--;
+    }
+    return (stack->content);
+}
+
+int     get_pos(t_list *stack, int elem)
+{
+    int pos;
+
+    pos = 0;
+    while (stack->content != elem)
+    {
+        stack = stack->next;
+        pos++;
+    }
+    return (pos);
+}
+
+int     maximum(int a, int b)
+{
+    if (a > b)
+        return (a);
+    return (b);
+}
+
 void	bad_exit(t_list **a)
 {
 	ft_lstclear(a);
@@ -23,20 +53,6 @@ void	good_exit(t_list **a)
 {
 	ft_lstclear(a);
 	exit(0);
-}
-
-void	print_stack(t_list *ab)                      // надо будет потом удалить эту штуку!!! 
-{
-	int	i;
-
-	i = 0;
-	while (ab)
-	{
-		printf("el[%d] = %d ", i, ab->content);
-		ab = ab->next;
-		i++;
-	}
-	printf("\n");
 }
 
 void    inter_command(t_list **a, t_list **b, char *com, char *str)

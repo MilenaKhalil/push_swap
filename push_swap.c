@@ -31,44 +31,59 @@ void	sort_three(t_list **stack_a)
 		swap(stack_a, "sa\n");
 }
 
-void	insert_el(t_list **a, t_list **b, int pos_a, int pos_b)  // просто ra и просто rb
+void	stack_rot(t_list **stack, int pos, char *com, char *rev)
 {
-	while (pos_a)
+	int     size;
+    int     elem;
+
+    elem = get_elem(*stack, pos);
+	size = ft_lstsize(*stack);
+	while ((*stack)->content != elem)
 	{
-		inter_command(a, b, "ra", "ra\n");
-		pos_a--;
+		if (pos > size / 2)
+			rotate(stack, 1, rev);
+		else
+			rotate(stack, 0, com);
 	}
-	while (pos_b)
-	{
-		inter_command(a, b, "rb", "rb\n");
-		pos_b--;
-	}
+}
+
+void	insert_el(t_list **a, t_list **b, int pos_a, int pos_b)
+{
+    int size_a;
+    int size_b;
+
+    size_a = ft_lstsize(*a);
+    size_b = ft_lstsize(*b);
+    if ((pos_a <= size_a / 2) && (pos_b <= size_b / 2))
+    {
+        while (pos_a && pos_b)
+        {
+            rotations(a, b, "rr", "rr\n");
+            pos_a--;
+            pos_b--;
+        }
+    }
+    else if ((pos_a > size_a / 2) && (pos_b > size_b / 2))
+    {
+        while (pos_a && pos_b)
+        {
+            rotations(a, b, "rrr", "rrr\n");
+            pos_a = (pos_a + 1) % ft_lstsize(*a);
+            pos_b = (pos_b + 1) % ft_lstsize(*b);
+        }
+    }
+    stack_rot(a, pos_a, "ra\n", "rra\n");
+    stack_rot(b, pos_b, "rb\n", "rrb\n");
 	inter_command(a, b, "pa", "pa\n");
 }
 
-void	stack_rot(t_list **a, t_list **b, int iter, int i)
-{
-	int	size_a;
-
-	size_a = ft_lstsize(*a);
-	while ((*a)->content != iter)
-	{
-		if (i > size_a / 2)
-			inter_command(a, b, "rra", "rra\n");
-		else
-			inter_command(a, b, "ra", "ra\n");
-	}
-}
-
-int	find_place(t_list **a, int elem, int min, int max)
+int	find_place(t_list *iter, int elem, int min, int max)
 {
 	int		i;
-	t_list	*iter;
 	t_list	*prev;
 
 	i = 0;
-	iter = *a;
-	prev = ft_lstlast(*a);
+	prev = ft_lstlast(iter);
 	if (elem > min && elem < max)
 	{
 		while (!(iter->content > elem && elem > prev->content))
@@ -79,92 +94,79 @@ int	find_place(t_list **a, int elem, int min, int max)
 	    }
 	}
 	else
-	{
-	    while (iter->content != min)
-	    {
-	        iter = iter->next;
-	        i++;
-	    }
-	}
+        return (get_pos(iter, min));
 	return (i);
 }
 
-int find_best(t_list **a, t_list *b, int min, int max)
+int analize(t_list *a, t_list *b, int pos_a, int pos_b)
 {
-    int b_pos;
-    int best;
-    int best_pos;
+    int size_a;
+    int size_b;
+
+    size_a = ft_lstsize(a);
+    size_b = ft_lstsize(b);
+    if ((pos_a <= size_a / 2) && (pos_b <= size_b / 2))
+        return (maximum(pos_a, pos_b));
+    if ((pos_a > size_a / 2) && (pos_b > size_b / 2))
+        return (maximum(size_a - pos_a, size_b - pos_b));
+    if (pos_a > size_a / 2)
+        pos_a = size_a - pos_a;
+    if (pos_b > size_b / 2)
+        pos_b = size_b - pos_b;
+    return (pos_a + pos_b);
+}
+
+int find_best(t_list *a, t_list *b, int min, int max)
+{
+    t_list  *head;
+    int     a_pos;
+    int     b_pos;
+    int     best;
+    int     best_pos;
 
     best = -1;
     b_pos = 0;
+    head = b;
     while (b)
     {
-        if (best == -1 || best > find_place(a, b->content, min, max) + b_pos)
+        a_pos = find_place(a, b->content, min, max);
+        if (best == -1 || best > analize(a, head, a_pos, b_pos))
         {
             best_pos = b_pos;
-            best = find_place(a, b->content, min, max) + b_pos;
+            best = analize(a, head, a_pos, b_pos);
         }
         b = b->next;
         b_pos++;
     }
-    //return best_pos;
-    return (0);
-}
-
-int     get_elem(t_list *stack, int pos)
-{
-    while (pos)
-    {
-        stack = stack->next;
-        pos--;
-    }
-    return (stack->content);
+    return (best_pos);
 }
 
 void    real_sort(t_list **a, t_list **b)
 {
-    t_list  *temp;
-    int     size_a;
     int     min;
     int     max;
     int     pos_a;
     int     pos_b;
-    int     i;
 
-    size_a = ft_lstsize(*a);
-    i = 0;
-    while (size_a > 3)
-    {
+    while (ft_lstsize(*a) > 3)
         inter_command(a, b, "pb", "pb\n");
-        size_a--;
-    }
     sort_three(a);
     min = (*a)->content;
     max = (*a)->next->next->content;
     while (*b)
     {
-        pos_b = find_best(a, *b, min, max);
-        pos_a = find_place(a, get_elem(*b, pos_b), min, max);//(*b)->content, min, max);
+        pos_b = find_best(*a, *b, min, max);
+        pos_a = find_place(*a, get_elem(*b, pos_b), min, max);
         if (get_elem(*b, pos_b) > max)
             max = get_elem(*b, pos_b);
         else if (get_elem(*b, pos_b) < min)
             min = get_elem(*b, pos_b);
-        /*if ((*b)->content > max)
-            max = (*b)->content;
-        else if ((*b)->content < min)
-            min = (*b)->content;*/
         insert_el(a, b, pos_a, pos_b);
     }
-    temp = *a;
-    while (temp->content != min)
-    {
-        temp = temp->next;
-        i++;
-    }
-    stack_rot(a, b, min, i);
+    stack_rot(a, get_pos(*a, min), "ra\n", "rra\n");
 }
 
-void    sort_stack(t_list **stack_a, t_list **stack_b)              // лучше передавать сюда структуру!!!
+void    sort_stack(t_list **stack_a, t_list **stack_b)
 {
     int     length;
 
@@ -175,5 +177,5 @@ void    sort_stack(t_list **stack_a, t_list **stack_b)              // лучш�
     else if (length == 3)
         sort_three(stack_a);
     else
-        real_sort(stack_a, stack_b);                                // нужно проверять числа на одинаковость!!!
+        real_sort(stack_a, stack_b);
 }

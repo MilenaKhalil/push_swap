@@ -44,6 +44,8 @@ void	bad_exit(t_list **a);
 void	good_exit(t_list **a);
 void    sort_stack(t_list **stack_a, t_list **stack_b);
 void    inter_command(t_list **a, t_list **b, char *com, char *str);
-void	print_stack(t_list *ab);                                              // I will have to remove it
+int     get_elem(t_list *stack, int pos);
+int     get_pos(t_list *stack, int elem);
+int     maximum(int a, int b);
 
 #endif

@@ -45,6 +45,7 @@ SRC = ft_memcmp.c \
 	  ft_memchr.c \
 	  ft_strlcat.c \
 	  ft_lstadd_front_bonus.c \
+	  ft_lstadd_back_bonus.c \
 	  ft_lstnew_bonus.c \
 	  ft_lstclear_bonus.c \
 	  ft_lstlast_bonus.c \

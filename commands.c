@@ -12,7 +12,7 @@
 
 #include "push_swap.h"
 
-void    swap(t_list **stack, char *str)                     //       sa, sb
+void    swap(t_list **stack, char *str)
 {
     t_list  *second;
     if (!(*stack) || !(*stack)->next)
@@ -24,7 +24,7 @@ void    swap(t_list **stack, char *str)                     //       sa, sb
     write(1, str, ft_strlen(str));
 }
 
-void    swaps(t_list **stack_a, t_list **stack_b, char *com, char *str) //       sa, sb, ss
+void    swaps(t_list **stack_a, t_list **stack_b, char *com, char *str)
 {
     if (com[1] == 'a')
         swap(stack_a, str);
@@ -32,13 +32,13 @@ void    swaps(t_list **stack_a, t_list **stack_b, char *com, char *str) //      
         swap(stack_b, str);
     else
     {
-        swap(stack_a, 0);
-        swap(stack_b, 0);
+        swap(stack_a, "");
+        swap(stack_b, "");
         write(1, str, ft_strlen(str));
     }
 }
 
-void    push(t_list **stack_a, t_list **stack_b, char *com, char *str)    //       pb, pa
+void    push(t_list **stack_a, t_list **stack_b, char *com, char *str)
 {
     t_list  *second;
     if (!ft_strncmp(com, "pb", 2))
@@ -62,7 +62,7 @@ void    push(t_list **stack_a, t_list **stack_b, char *com, char *str)    //    
     write(1, str, ft_strlen(str));
 }
 
-void    rotate(t_list **stack, int rev, char *str)            //       ra, rb, rra, rrb
+void    rotate(t_list **stack, int rev, char *str)
 {
     t_list  *last;
     t_list  *temp;
@@ -88,7 +88,7 @@ void    rotate(t_list **stack, int rev, char *str)            //       ra, rb, r
     write(1, str, ft_strlen(str));
 }
 
-void    rotations(t_list **a, t_list **b, char *com, char *str) //     ra, rb, rr, rra, rrb, rrr
+void    rotations(t_list **a, t_list **b, char *com, char *str)
 {
     int rev;
 
@@ -96,11 +96,11 @@ void    rotations(t_list **a, t_list **b, char *com, char *str) //     ra, rb, r
     if (com[1 + rev] == 'a')
         rotate(a, rev, str);
     else if (com[1 + rev] == 'b')
-        rotate(a, rev, str);
+        rotate(b, rev, str);
     else
     {
-        rotate(a, rev, 0);
-        rotate(b, rev, 0);
+        rotate(a, rev, "");
+        rotate(b, rev, "");
         write(1, str, ft_strlen(str));
     }
 }
