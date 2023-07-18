@@ -15,34 +15,48 @@ SRC =	main.c \
 		push_swap.c \
 		utils.c
 
+SRC_BONUS =	commands.c \
+			utils.c
+
 LIBFT = ./libft/libft.a
 
-OBJ = $(SRC:.c=.o)
+OBJ_REG = $(SRC:.c=.o)
+
+OBJ_BONUS = $(SRC_BONUS:.c=.o)
 
 CFLAGS = -Wall -Werror -Wextra 
 
-NAME = push_swap
-
-INCLUDE = -I ./
+ifdef (WITH_BONUS)
+	OBJ = $(OBJ_BONUS)
+	HEADER = push_swap_bonus.h
+	NAME = push_swap_bonus
+else
+	OBJ = $(OBJ_REG)
+	HEADER = push_swap.h
+	NAME = push_swap
+endif
 
 all: $(NAME)
 
 $(LIBFT):
 	$(MAKE) -C libft
 
+%.o: %.c $(HEADER)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
 $(NAME): $(OBJ) $(LIBFT)
 	$(CC) $(CFLAGS) $^ -o $@
 
-%.o: %.c push_swap.h
-	$(CC) $(CFLAGS) -c -o $@ $<
-
 clean:
-	rm -f $(OBJ)
+	rm -f $(OBJ_REG) $(OBJ_BONUS)
 	$(MAKE) clean -C libft
 
 fclean: clean
 	rm -f $(NAME)
 	$(MAKE) fclean -C libft
+
+bonus:
+	$(MAKE) WITH_BONUS=1 all
 
 re: fclean all
 
