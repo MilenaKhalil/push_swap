@@ -6,7 +6,7 @@
 #    By: mikhalil <marvin@codam.nl>                   +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/10/30 15:47:49 by mikhalil      #+#    #+#                  #
-#    Updated: 2022/11/12 17:14:52 by mikhalil      ########   odam.nl          #
+#    Updated: 2023/07/18 20:28:56 by mikhalil      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -68,7 +68,7 @@ $(NAME): $(OBJ)
 #	mkdir $(OBJECTS)
 #	mv $(OBJ) $(OBJECTS)
 
-%.o: %.c libft.h
+%.o: %.c libft.h get_next_line.h
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:

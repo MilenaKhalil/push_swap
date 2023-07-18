@@ -1,74 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   main.c                                             :+:    :+:            */
+/*   main_bonus.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: mikhalil <mikhalil@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/03 21:12:16 by mikhalil      #+#    #+#                 */
-/*   Updated: 2023/07/18 20:47:47 by mikhalil      ########   odam.nl         */
+/*   Updated: 2023/07/18 20:46:52 by mikhalil      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
-
-void	sort_three(t_list **stack_a)
-{
-	t_list	*a;
-	t_list	*ne;
-	t_list	*nene;
-
-	a = (*stack_a);
-	ne = a->next;
-	nene = a->next->next;
-	if (a->content < ne->content && ne->content < nene->content)
-		return ;
-	if (a->content > ne->content && a->content > nene->content)
-		rotate(stack_a, 0, "ra\n");
-	else if (ne->content > a->content && ne->content > nene->content)
-		rotate(stack_a, 1, "rra\n");
-	if ((*stack_a)->content > (*stack_a)->next->content)
-		swap(stack_a, "sa\n");
-}
-
-void	real_sort(t_list **a, t_list **b)
-{
-	int	min;
-	int	max;
-	int	pos_a;
-	int	pos_b;
-
-	while (ft_lstsize(*a) > 3)
-		inter_command(a, b, "pb", "pb\n");
-	sort_three(a);
-	min = (*a)->content;
-	max = (*a)->next->next->content;
-	while (*b)
-	{
-		pos_b = find_best(*a, *b, min, max);
-		pos_a = find_place(*a, get_elem(*b, pos_b), min, max);
-		if (get_elem(*b, pos_b) > max)
-			max = get_elem(*b, pos_b);
-		else if (get_elem(*b, pos_b) < min)
-			min = get_elem(*b, pos_b);
-		insert_el(a, b, pos_a, pos_b);
-	}
-	stack_rot(a, get_pos(*a, min), "ra\n", "rra\n");
-}
-
-void	sort_stack(t_list **stack_a, t_list **stack_b)
-{
-	int	length;
-
-	(void) stack_b;
-	length = ft_lstsize(*stack_a);
-	if (length == 2)
-		swap(stack_a, "sa\n");
-	else if (length == 3)
-		sort_three(stack_a);
-	else
-		real_sort(stack_a, stack_b);
-}
+#include "push_swap_bonus.h"
+#include "libft/libft.h"
 
 int	get_input(int argc, char **clean, t_list **a)
 {
@@ -98,6 +41,61 @@ int	get_input(int argc, char **clean, t_list **a)
 	return (sorted);
 }
 
+char	*match_command(t_list **a, t_list **b, char *com)
+{
+	if (!ft_strncmp("sa\n", com, 3) || !ft_strncmp("sb\n", com, 3)
+		|| !ft_strncmp("ss\n", com, 3) || !ft_strncmp("ra\n", com, 3)
+		|| !ft_strncmp("rb\n", com, 3) || !ft_strncmp("rr\n", com, 3)
+		|| !ft_strncmp("pa\n", com, 3) || !ft_strncmp("pb\n", com, 3)
+		|| !ft_strncmp("rra\n", com, 4) || !ft_strncmp("rrb\n", com, 4)
+		|| !ft_strncmp("rrr\n", com, 4))
+	{
+		com[ft_strlen(com) - 1] = 0;
+		return (com);
+	}
+	else if (b)
+		ft_lstlast(*a)->next = *b;
+	if (com)
+		free(com);
+	bad_exit(a);
+	return (0);
+}
+
+int	is_sorted(t_list *a, t_list *b)
+{
+	int	prev;
+
+	if (b)
+		return (0);
+	prev = a->content;
+	a = a->next;
+	while (a)
+	{
+		if (prev > a->content)
+			return (0);
+		prev = a->content;
+		a = a->next;
+	}
+	return (1);
+}
+
+void	checker(t_list **a, t_list **b)
+{
+	char	*com;
+
+	com = get_next_line(0);
+	while (com)
+	{
+		inter_command(a, b, match_command(a, b, com), "");
+		free(com);
+		com = get_next_line(0);
+	}
+	if (is_sorted(*a, *b))
+		write(1, "OK\n", 3);
+	else
+		write(1, "KO\n", 3);
+}
+
 int	main(int argc, char **argv)
 {
 	t_list	*stack_a;
@@ -117,11 +115,9 @@ int	main(int argc, char **argv)
 	i = 0;
 	while (clean[i])
 		i++;
-	//printf("sa\n");
-	if (get_input(i, clean, &stack_a))
-		good_exit(&stack_a);
+	get_input(i, clean, &stack_a);
 	check_dup(&stack_a);
-	sort_stack(&stack_a, &stack_b);
+	checker(&stack_a, &stack_b);
 	if (flag)
 		free_mem(clean, i - 1);
 	good_exit(&stack_a);

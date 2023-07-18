@@ -6,7 +6,7 @@
 /*   By: mikhalil <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/04 19:54:19 by mikhalil      #+#    #+#                 */
-/*   Updated: 2022/11/23 18:15:30 by mikhalil      ########   odam.nl         */
+/*   Updated: 2023/07/18 20:30:42 by mikhalil      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,11 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <limits.h>
+# include "get_next_line.h"
 
 typedef struct s_list
 {
-	int 			content;
+	int				content;
 	struct s_list	*next;
 }	t_list;
 

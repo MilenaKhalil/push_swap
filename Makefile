@@ -6,17 +6,21 @@
 #    By: mikhalil <marvin@codam.nl>                   +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/11/12 17:15:07 by mikhalil      #+#    #+#                  #
-#    Updated: 2023/04/25 23:04:54 by mikhalil      ########   odam.nl          #
+#    Updated: 2023/07/18 20:37:25 by mikhalil      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 SRC =	main.c \
 		commands.c \
 		push_swap.c \
-		utils.c
+		utils.c \
+		utils_mand.c \
+		exit.c
 
 SRC_BONUS =	commands.c \
-			utils.c
+			utils.c \
+			main_bonus.c \
+			exit.c
 
 LIBFT = ./libft/libft.a
 
@@ -24,12 +28,16 @@ OBJ_REG = $(SRC:.c=.o)
 
 OBJ_BONUS = $(SRC_BONUS:.c=.o)
 
-CFLAGS = -Wall -Werror -Wextra 
+OBJ = $(OBJ_BONUS)
 
-ifdef (WITH_BONUS)
+CFLAGS = -Wall -Werror -Wextra
+
+HEADER = push_swap_bonus.h
+
+ifdef WITH_BONUS
 	OBJ = $(OBJ_BONUS)
 	HEADER = push_swap_bonus.h
-	NAME = push_swap_bonus
+	NAME = checker
 else
 	OBJ = $(OBJ_REG)
 	HEADER = push_swap.h
@@ -44,7 +52,7 @@ $(LIBFT):
 %.o: %.c $(HEADER)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-$(NAME): $(OBJ) $(LIBFT)
+$(NAME): $(LIBFT) $(OBJ)
 	$(CC) $(CFLAGS) $^ -o $@
 
 clean:
@@ -60,5 +68,4 @@ bonus:
 
 re: fclean all
 
-.PHONY: all re fclean clean
-
+.PHONY: all re fclean clean bonus

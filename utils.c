@@ -1,66 +1,96 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   main2.c                                            :+:    :+:            */
+/*   utils.c                                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: mikhalil <mikhalil@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/03 21:12:16 by mikhalil      #+#    #+#                 */
-/*   Updated: 2023/07/06 19:13:53 by mikhalil      ########   odam.nl         */
+/*   Updated: 2023/07/18 18:16:33 by mikhalil      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int     get_elem(t_list *stack, int pos)
+int	itoa(t_list **a, char *str)
 {
-    while (pos)
-    {
-        stack = stack->next;
-        pos--;
-    }
-    return (stack->content);
+	long	res;
+	int		min;
+	int		i;
+
+	res = 0;
+	min = -1;
+	i = 0;
+	if (!str[0] || (str[0] == '-' && !str[1]))
+		bad_exit(a);
+	if (str[i] == '-')
+	{
+		min = 1;
+		i++;
+	}
+	while (str[i])
+	{
+		if (str[i] <= '9' && str[i] >= '0')
+			res = res * 10 - (str[i] - '0');
+		else
+			bad_exit(a);
+		if (res * min > INT_MAX || res * min < INT_MIN)
+			bad_exit(a);
+		i++;
+	}
+	return (res * min);
 }
 
-int     get_pos(t_list *stack, int elem)
+void	check_dup(t_list **stack_a)
 {
-    int pos;
+	t_list	*now;
+	t_list	*a;
 
-    pos = 0;
-    while (stack->content != elem)
-    {
-        stack = stack->next;
-        pos++;
-    }
-    return (pos);
+	a = *stack_a;
+	if (!a || !(a->next))
+		return ;
+	while (a->next)
+	{
+		now = a->next;
+		while (now)
+		{
+			if (now->content == a->content)
+				bad_exit(stack_a);
+			now = now->next;
+		}
+		a = a->next;
+	}
 }
 
-int     maximum(int a, int b)
+char	**clean_input(char **argv)
 {
-    if (a > b)
-        return (a);
-    return (b);
+	int		i;
+	char	**test;
+
+	i = 0;
+	while (argv[1][i])
+	{
+		if (argv[1][i] == ' ')
+		{
+			test = ft_split(argv[1], ' ');
+			if (!(*test))
+				bad_exit(NULL);
+			test[0][0]--;
+			break ;
+		}
+		i++;
+	}
+	if (!argv[1][i])
+		test = &argv[1];
+	return (test);
 }
 
-void	bad_exit(t_list **a)
+void	inter_command(t_list **a, t_list **b, char *com, char *str)
 {
-	ft_lstclear(a);
-	write(2, "Error\n", 6);
-	exit(1);
-}
-
-void	good_exit(t_list **a)
-{
-	ft_lstclear(a);
-	exit(0);
-}
-
-void    inter_command(t_list **a, t_list **b, char *com, char *str)
-{
-    if (com[0] == 's')
-        swaps(a, b, com, str);
-    else if (com[0] == 'p')
-        push(a, b, com, str);
-    else
-        rotations(a, b, com, str);
+	if (com[0] == 's')
+		swaps(a, b, com, str);
+	else if (com[0] == 'p')
+		push(a, b, com, str);
+	else
+		rotations(a, b, com, str);
 }

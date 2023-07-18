@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_lstnew.c                                        :+:    :+:            */
+/*   ft_lstnew_bonus.c                                  :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: mikhalil <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/30 13:38:14 by mikhalil      #+#    #+#                 */
-/*   Updated: 2022/11/01 15:55:03 by mikhalil      ########   odam.nl         */
+/*   Updated: 2023/07/18 18:05:09 by mikhalil      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,4 +23,3 @@ t_list	*ft_lstnew(int content)
 	new->content = content;
 	return (new);
 }
-

@@ -6,7 +6,7 @@
 /*   By: mikhalil <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/01 16:33:51 by mikhalil      #+#    #+#                 */
-/*   Updated: 2022/11/02 12:40:49 by mikhalil      ########   odam.nl         */
+/*   Updated: 2023/07/18 16:34:46 by mikhalil      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 	t_list	*last;
 
 	if (!lst)
-        return ;
+		return ;
 	if (!(*lst))
 	{
 		*lst = new;

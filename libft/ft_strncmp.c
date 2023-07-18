@@ -6,11 +6,11 @@
 /*   By: mikhalil <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/04 20:59:40 by mikhalil      #+#    #+#                 */
-/*   Updated: 2022/11/01 14:16:37 by mikhalil      ########   odam.nl         */
+/*   Updated: 2023/07/18 20:44:23 by mikhalil      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h" 
+#include "libft.h"
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
@@ -33,14 +33,3 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	}
 	return (0);
 }
-/*#include <string.h>
-int main()
-{
-	const char *s1 = "test\200";
-	const char *s2 = "test\0";
-	int i1, i2, n = 6;
-	i1 = strncmp(s1, s2, n);
-	i2 = ft_strncmp(s1, s2, n);
-	printf("or = %d\nmy = %d\n", i1, i2);
-	return 0;
-}*/
