@@ -6,7 +6,7 @@
 /*   By: mikhalil <mikhalil@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/03 21:12:16 by mikhalil      #+#    #+#                 */
-/*   Updated: 2023/07/18 20:47:47 by mikhalil      ########   odam.nl         */
+/*   Updated: 2023/07/19 17:01:45 by mikhalil      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,6 @@ int	main(int argc, char **argv)
 	i = 0;
 	while (clean[i])
 		i++;
-	//printf("sa\n");
 	if (get_input(i, clean, &stack_a))
 		good_exit(&stack_a);
 	check_dup(&stack_a);
