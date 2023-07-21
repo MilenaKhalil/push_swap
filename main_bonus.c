@@ -6,7 +6,7 @@
 /*   By: mikhalil <mikhalil@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/03 21:12:16 by mikhalil      #+#    #+#                 */
-/*   Updated: 2023/07/18 20:46:52 by mikhalil      ########   odam.nl         */
+/*   Updated: 2023/07/21 16:56:46 by mikhalil      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ int	get_input(int argc, char **clean, t_list **a)
 		if (!temp)
 			bad_exit(a);
 		if (!(*a))
-			*a = ft_lstnew(prev);
+			*a = temp;
 		else
-			ft_lstadd_front(a, ft_lstnew(prev));
+			ft_lstadd_front(a, temp);
 		i--;
 	}
 	return (sorted);
